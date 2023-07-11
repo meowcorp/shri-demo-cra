@@ -24,7 +24,7 @@ jobs:
       - name: Run e2e tests
         uses: coactions/setup-xvfb@v1
         with:
-          run: npm run e2e
+          run: npm run e2e-ci
       - uses: actions/upload-artifact@v3
         if: always()
         with:
