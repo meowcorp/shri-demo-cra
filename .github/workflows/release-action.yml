@@ -22,13 +22,13 @@ jobs:
       - name: Generate Changelog
         id: changelog
         uses: requarks/changelog-action@v1
+        continue-on-error: true
         with:
           token: ${{ github.token }}
           fromTag: ${{ env.previousTag }}
           toTag: ${{ github.ref_name }}
           writeToFile: false
       - name: Create Release
-        if: success() || failure()
         id: create_release
         uses: ncipollo/release-action@v1
         with:
