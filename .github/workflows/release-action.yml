@@ -7,13 +7,12 @@ on:
 jobs:
   Release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0 
-      - name: echo_test
-        run: |
-          echo $(git tag)
       - name: Get previous tag
         id: previousTag
         run: |
@@ -25,8 +24,8 @@ jobs:
         uses: requarks/changelog-action@v1
         with:
           token: ${{ github.token }}
-          fromTag: ${{ github.ref_name }}
-          toTag: ${{ env.previousTag }}
+          fromTag: ${{ env.previousTag }}
+          toTag: ${{ github.ref_name }}
           writeToFile: false
       - name: Create Release
         id: create_release
