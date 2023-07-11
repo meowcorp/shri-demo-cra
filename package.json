@@ -32,7 +32,8 @@
         "test": "react-scripts test",
         "e2e": "playwright test --project=chromium && playwright show-report",
         "test-ci": "CI=true npm test -- --reporters=\"default\" --reporters=\"jest-html-reporter\" --reporters=\"jest-teamcity\"",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "lint": "tsc --noEmit && eslint . --ext .ts,.tsx --ignore-pattern node_modules/"
     },
     "eslintConfig": {
         "extends": [

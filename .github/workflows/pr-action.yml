@@ -1,0 +1,17 @@
+name: Pull request action
+run-name: Validate ${{ github.event.pull_request.title }} PR
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/push-action.yml
+      - name: Setup Node JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: v16.19.0
+          cache: npm
+      - run: npm ci
+      - name: Run tests
+        run: npm run test-ci
+      - name: Run linters
+        run: npm run lint
