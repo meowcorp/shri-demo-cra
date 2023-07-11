@@ -1,5 +1,6 @@
 name: Pull request action
 run-name: Validate ${{ github.event.pull_request.title }} PR
+on: pull_request
 jobs:
   test:
     runs-on: ubuntu-latest
