@@ -10,23 +10,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Generate changelog
+      - name: Get previous tag
+        id: previousTag
+        run: |
+          name=$(git --no-pager tag --sort=creatordate --merged ${{ github.ref_name }} | tail -2 | head -1)
+          echo "previousTag: $name"
+          echo "previousTag=$name" >> $GITHUB_ENV
+      - name: Generate Changelog
         id: changelog
-        uses: metcalfc/changelog-generator@v4.1.0
+        uses: requarks/changelog-action@v1
         with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
+          fromTag: ${{ github.ref_name }}
+          toTag: ${{ env.previousTag }}
+          writeToFile: false
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ github.ref }}
           name: Release ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.changelog }}
+          body: ${{ steps.changelog.outputs.changes }}
       - name: Create issue  
         uses: JasonEtco/create-an-issue@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CHANGELOG: ${{ steps.modified.outputs.log }}
+          CHANGELOG: ${{ steps.changelog.outputs.changes }}
       - uses: ./.github/workflows/pr-action.yml
       - name: Build
         run: npm run build
