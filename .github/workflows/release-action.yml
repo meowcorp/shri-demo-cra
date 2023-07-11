@@ -3,7 +3,7 @@ run-name: Release ${{ github.ref_name }}
 on:
   push:
     tags:
-      - v**
+      - 'v*'
 jobs:
   Release:
     runs-on: ubuntu-latest
@@ -14,17 +14,14 @@ jobs:
           fetch-depth: 0 
       - name: Get previous tag
         id: previousTag
-        run: |
-          name=$(git tag --sort=-creatordate | grep -A 1 ${{ github.ref_name }} | tail -n 1)
-          echo "previousTag: $name"
-          echo "previousTag=$name" >> $GITHUB_ENV
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
       - name: Generate Changelog
         id: changelog
         uses: requarks/changelog-action@v1
         with:
           token: ${{ github.token }}
-          fromTag: ${{ github.ref_name }}
-          toTag: ${{ env.previousTag }}
+          fromTag: ${{ steps.previousTag.outputs.tag }}
+          toTag: ${{ github.ref_name }}
           writeToFile: false
       - name: Create Release
         id: create_release
