@@ -28,17 +28,18 @@ jobs:
           toTag: ${{ github.ref_name }}
           writeToFile: false
       - name: Create Release
+        if: success() || failure()
         id: create_release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ github.ref }}
           name: Release ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.changes }}
+          body: ${{ steps.changelog.outputs.changes || "No changelog" }}
       - name: Create issue  
         uses: JasonEtco/create-an-issue@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CHANGELOG: ${{ steps.changelog.outputs.changes }}
+          CHANGELOG: ${{ steps.changelog.outputs.changes || "No changelog" }}
       - uses: ./.github/workflows/pr-action.yml
       - name: Build
         run: npm run build
