@@ -20,7 +20,9 @@ jobs:
       - name: Run tests
         run: npm run test-ci
       - name: Run e2e tests
-        run: npm run e2e
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: npm run e2e
       - name: Run linters
         run: npm run lint
       - uses: actions/upload-artifact@v3
