@@ -3,13 +3,15 @@ run-name: Release ${{ github.ref_name }}
 on:
   push:
     tags:
-      - '*'
+      - v**
 jobs:
   Release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: 
       - name: Get previous tag
         id: previousTag
         run: |
