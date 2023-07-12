@@ -1,7 +1,7 @@
 const {getIssueTemplate} = require('./helpers')
 
 module.exports = async ({github, context}) => {
-    const {TAG_TIMESTAMP, RELEASE_AUTHOR, CHANGELOG} = process.env
+    const {TAG_TIMESTAMP, ISSUE_ID, TAG, RELEASE_AUTHOR, CHANGELOG} = process.env
     const template = getIssueTemplate({
       timestamp: TAG_TIMESTAMP, 
       author: RELEASE_AUTHOR,
