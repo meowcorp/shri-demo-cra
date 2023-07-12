@@ -10,10 +10,14 @@ env:
   TAG: ${{ github.ref_name }}
 
 jobs:
+  # Testing:
+  #   uses: ./.github/workflows/pr-action.yml
   Release:
+    # needs: [Testing]
     runs-on: ubuntu-latest
     permissions: 
       contents: write
+      issues: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -47,6 +51,5 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/createReleaseIssue.js')
             await script({github, context, core})
-  Testing:
-    uses: ./.github/workflows/pr-action.yml
+
             
