@@ -12,10 +12,10 @@ const getIssueTemplate = ({timestamp, tag, author, changelog, isUpdate = false},
 # Информация
 Был создан новый релиз <br />
 Дата создания: ${timestamp} <br />
-Версия: (${tag})[${tagLink}] <br />
+Версия: [${tag}](${tagLink}) <br />
 Автор: ${author}
 
-(${testStatus})[${workflowLink}]
+[${testStatus}](${workflowLink})
 
 ## Список изменений:
 ${changelog}`

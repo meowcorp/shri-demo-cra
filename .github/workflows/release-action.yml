@@ -52,15 +52,22 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/createReleaseIssue.js')
             await script({github, context, core})
-  Testing:
-    uses: ./.github/workflows/pr-action.yml
+  # Testing:
+  #   needs: [Release]
+  #   uses: ./.github/workflows/pr-action.yml
   Deploy:
-    needs: [Testing]
+    needs: [Release]
     runs-on: ubuntu-latest
+    permissions: 
+      issues: write
+      contents: write
     env:
       ISSUE_ID: ${{ needs.Release.outputs.issueID }}
       CHANGELOG: ${{ needs.Release.outputs.changelog }}
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Update Release Issue
         uses: actions/github-script@v6
         env:
@@ -70,3 +77,9 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/updateReleaseIssue.js')
             await script({github, context, core})
+      - name: Build
+        run: npm run build
+      - name: Deploy to Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build
