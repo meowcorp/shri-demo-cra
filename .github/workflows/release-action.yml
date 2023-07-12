@@ -4,18 +4,18 @@ on:
   push:
     tags:
       - 'v[1-9]+'
-  job:
-    Release:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-        - name: Set env tag
-          run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-        - name: Set env tag hash
-          run: echo "TAG_HASH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
-        - name: Print versions
-          run: |
-            echo $RELEASE_TAG
-            echo $TAG_HASH
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set env tag
+        run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Set env tag hash
+        run: echo "TAG_HASH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
+      - name: Print versions
+        run: |
+          echo $RELEASE_TAG
+          echo $TAG_HASH
