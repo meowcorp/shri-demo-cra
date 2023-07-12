@@ -1,5 +1,5 @@
 name: Release
-run-name: Release {{ github.ref_name }} version
+run-name: Release ${{ github.ref_name }} version
 on:
   push:
     tags:
@@ -11,7 +11,15 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Print versions
-        run: |
-          echo ${{ github.sha }}
-          echo ${{ github.ref_name }}
+      - name: Generate changelog
+        uses: actions/github-script@v6
+        id: changelog
+        env:
+          SHA: ${{ github.sha }}
+          TAG: ${{ github.ref_name }}
+        with:
+          result-encoding: string
+          script: |
+            const script = require('./scripts/getChangelog.js')
+      - name: Print CHANGELOG
+        run: echo "${{steps.changelog.outputs.changelog}}"
