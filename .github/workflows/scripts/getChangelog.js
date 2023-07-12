@@ -34,7 +34,7 @@ module.exports = async ({github, context, core}) => {
         commits = [commit.data]
     } else {
         const compare = await github.rest.repos.compareCommitsWithBasehead({
-            owner: ontext.repo.owner,
+            owner: context.repo.owner,
             repo: context.repo.repo,
             basehead: `${prevTagName}...${TAG}`,
         });
