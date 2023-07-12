@@ -1,50 +1,21 @@
-name: Release action
-run-name: Release ${{ github.ref_name }}
+name: Release
+run-name: Release {{ github.ref_name }} version
 on:
   push:
     tags:
-      - 'v**'
-jobs:
-  Release:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 
-      - name: Get previous tag
-        id: previousTag
-        run: |
-          name=$(git tag --sort=-creatordate | grep -A 1 ${{ github.ref_name }} | tail -n 1)
-          echo "previousTag: $name"
-          echo "previousTag=$name" >> $GITHUB_ENV
-      - name: Generate Changelog
-        id: changelog
-        uses: requarks/changelog-action@v1
-        continue-on-error: true
-        with:
-          token: ${{ github.token }}
-          fromTag: ${{ env.previousTag }}
-          toTag: ${{ github.ref_name }}
-          writeToFile: false
-      - name: Create Release
-        id: create_release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ github.ref }}
-          name: Release ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.changes || 'No changelog' }}
-      - name: Create issue  
-        uses: JasonEtco/create-an-issue@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CHANGELOG: ${{ steps.changelog.outputs.changes || 'No changelog' }}
-      - uses: ./.github/workflows/pr-action.yml
-      - name: Build
-        run: npm run build
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+      - 'v[1-9]+'
+  job:
+    Release:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+        - name: Set env tag
+          run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        - name: Set env tag hash
+          run: echo "TAG_HASH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
+        - Print versions
+          run: |
+            echo $RELEASE_TAG
+            echo $TAG_HASH
