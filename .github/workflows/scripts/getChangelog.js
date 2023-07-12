@@ -1,3 +1,5 @@
+const {getBaseUrl} = require('./helpers')
+
 module.exports = async ({github, context, core}) => {
     const queryLastTag = `
       query ($owner: String!, $repo: String!, $currentTagOid: String!) {
@@ -41,9 +43,13 @@ module.exports = async ({github, context, core}) => {
         commits = compare.data.commits;
     }
 
+    const BASE_URL = getBaseUrl(context)
+
     const changelog = commits.reverse().map(({commit}) => {
-        return `* [${commit.message}](${commit.url})`
-    }).join('\n')
+        const link = `${BASE_URL}/commit/${commit.sha}`
+
+        return `* [${commit.message}](${link})`
+    }).join('<br />')
 
     core.setOutput('changelog', changelog)
 }
