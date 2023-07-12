@@ -42,7 +42,7 @@ module.exports = async ({github, context, core}) => {
     }
 
     const changelog = commits.reverse().map(({commit}) => {
-        return `[${commit.message}](${commit.url})`
+        return `* [${commit.message}](${commit.url})`
     }).join('\n')
 
     core.setOutput('changelog', changelog)

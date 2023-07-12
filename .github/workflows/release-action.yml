@@ -40,13 +40,16 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/createRelease.js')
             await script({github, context, core})
+      - name: Logging
+        run: |
+          echo "${{toJSON(github.event)}}"
       - name: Create Release Issue
         uses: actions/github-script@v6
         env: 
           CHANGELOG: ${{ steps.changelog.outputs.changelog }}
           TAG_TIMESTAMP: ${{ github.event.push.created }}
           TAG_TIMESTAMP_UPDATED: ${{ github.event.push.head_commit.timestamp }}
-          RELEASE_AUTHOR: ${{ github.event.push.head_commit.author.name }}
+          RELEASE_AUTHOR: ${{ github.actor }}
         with:
           script: |
             const script = require('./.github/workflows/scripts/createReleaseIssue.js')

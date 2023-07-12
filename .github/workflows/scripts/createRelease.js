@@ -9,6 +9,6 @@ module.exports = async ({github, context}) => {
         body: `
             # CHANGELOG
             ${process.env.CHANGELOG}
-        `
+        `.replaceAll(/[ \t]+/g, ''),
     });
 }
