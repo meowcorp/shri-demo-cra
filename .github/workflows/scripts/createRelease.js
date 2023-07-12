@@ -7,8 +7,8 @@ module.exports = async ({github, context}) => {
         tag_name: TAG,
         name: `Release ${TAG}`,
         body: `
-            # CHANGELOG
-            ${process.env.CHANGELOG}
-        `.replaceAll(/\t+/g, ''),
+# CHANGELOG
+${process.env.CHANGELOG}
+        `,
     });
 }

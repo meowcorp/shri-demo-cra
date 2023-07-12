@@ -6,15 +6,15 @@ module.exports = async ({github, context, core}) => {
         repo: context.repo.repo,
         title: TAG,
         body: `
-            # Информация
-            Был создан новый релиз\
-            Дата создания: ${TAG_TIMESTAMP}\
-            Версия: ${TAG}\
-            Автор: ${RELEASE_AUTHOR}
+# Информация
+Был создан новый релиз\
+Дата создания: ${TAG_TIMESTAMP}\
+Версия: ${TAG}\
+Автор: ${RELEASE_AUTHOR}
 
-            ## Список изменений:
-            ${CHANGELOG}
-        `.replaceAll(/\t+/g, ''),
+## Список изменений:
+${CHANGELOG}
+        `,
         labels: ["release"]
       });
 }

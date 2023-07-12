@@ -47,8 +47,8 @@ jobs:
         uses: actions/github-script@v6
         env: 
           CHANGELOG: ${{ steps.changelog.outputs.changelog }}
-          TAG_TIMESTAMP: ${{ github.event.timestamp }}
-          TAG_TIMESTAMP_UPDATED: ${{  github.event.repository.updated_at }}
+          TAG_TIMESTAMP: ${{ toJSON(github.event.head_commit.timestamp) }}
+          TAG_TIMESTAMP_UPDATED: ${{ toJSON(github.event.repository.updated_at) }}
           RELEASE_AUTHOR: ${{ github.actor }}
         with:
           script: |
