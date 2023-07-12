@@ -14,5 +14,6 @@ module.exports = async ({github, context}) => {
       repo: context.repo.repo,
       issue_number: ISSUE_ID,
       body: template,
+      state: "closed"
     });
 }
