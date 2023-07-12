@@ -21,5 +21,6 @@ jobs:
           result-encoding: string
           script: |
             const script = require('./.github/workflows/scripts/getChangelog.js')
+            await script({github, context, core})
       - name: Print CHANGELOG
         run: echo "${{steps.changelog.outputs.changelog}}"
