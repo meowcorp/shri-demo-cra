@@ -20,6 +20,6 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const script = require('./scripts/getChangelog.js')
+            const script = require('./.github/workflows/scripts/getChangelog.js')
       - name: Print CHANGELOG
         run: echo "${{steps.changelog.outputs.changelog}}"
