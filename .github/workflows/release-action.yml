@@ -4,6 +4,11 @@ on:
   push:
     tags:
       - 'v[0-9]+'
+
+env:
+  SHA: ${{ github.sha }}
+  TAG: ${{ github.ref_name }}
+
 jobs:
   Release:
     runs-on: ubuntu-latest
@@ -14,13 +19,18 @@ jobs:
       - name: Generate changelog
         uses: actions/github-script@v6
         id: changelog
-        env:
-          SHA: ${{ github.sha }}
-          TAG: ${{ github.ref_name }}
         with:
           result-encoding: string
           script: |
             const script = require('./.github/workflows/scripts/getChangelog.js')
             await script({github, context, core})
       - name: Print CHANGELOG
-        run: echo "${{steps.changelog.outputs.changelog}}"
+        run: echo "${{ steps.changelog.outputs.changelog }}"
+      - name: Create Release
+        uses: actions/github-script@v6
+        env: 
+          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
+        with:
+          script: |
+            const script = require('./.github/workflows/scripts/createRelease.js')
+            await script({github, context, core})
