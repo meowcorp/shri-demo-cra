@@ -54,32 +54,32 @@ jobs:
             await script({github, context, core})
   Testing:
     uses: ./.github/workflows/pr-action.yml
-  Deploy:
-    needs: [Testing]
-    runs-on: ubuntu-latest
-    steps:
-      - env:
-          ISSUE_ID: ${{ needs.Release.outputs.issueID }}
-          CHANGELOG: ${{ needs.Release.outputs.changelog }}
-      - name: Update Release Issue
-      - uses: actions/github-script@v6
-        env:
-          TAG_TIMESTAMP: ${{ toJSON(github.event.head_commit.timestamp) }}
-          RELEASE_AUTHOR: ${{ github.actor }}
-        with:
-          script: |
-            const {getIssueTemplate} =  = require('./.github/workflows/scripts/helpers.js')
+  # Deploy:
+  #   needs: [Testing]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - env:
+  #         ISSUE_ID: ${{ needs.Release.outputs.issueID }}
+  #         CHANGELOG: ${{ needs.Release.outputs.changelog }}
+  #     - name: Update Release Issue
+  #     - uses: actions/github-script@v6
+  #       env:
+  #         TAG_TIMESTAMP: ${{ toJSON(github.event.head_commit.timestamp) }}
+  #         RELEASE_AUTHOR: ${{ github.actor }}
+  #       with:
+  #         script: |
+  #           const {getIssueTemplate} =  = require('./.github/workflows/scripts/helpers.js')
 
-            const {TAG_TIMESTAMP, RELEASE_AUTHOR, CHANGELOG} = process.env
-            const template = getIssueTemplate({
-              timestamp: TAG_TIMESTAMP, 
-              author: RELEASE_AUTHOR,
-              tag: TAG,
-              changelog: CHANGELOG 
-            }, context)
-            github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: ISSUE_ID,
-              isUpdate: true
-            });
+  #           const {TAG_TIMESTAMP, RELEASE_AUTHOR, CHANGELOG} = process.env
+  #           const template = getIssueTemplate({
+  #             timestamp: TAG_TIMESTAMP, 
+  #             author: RELEASE_AUTHOR,
+  #             tag: TAG,
+  #             changelog: CHANGELOG 
+  #           }, context)
+  #           github.rest.issues.update({
+  #             owner: context.repo.owner,
+  #             repo: context.repo.repo,
+  #             issue_number: ISSUE_ID,
+  #             isUpdate: true
+  #           });
