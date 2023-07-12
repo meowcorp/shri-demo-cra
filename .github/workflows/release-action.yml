@@ -3,7 +3,7 @@ run-name: Release {{ github.ref_name }} version
 on:
   push:
     tags:
-      - 'v[1-9]+'
+      - 'v[0-9]+'
 jobs:
   Release:
     runs-on: ubuntu-latest
