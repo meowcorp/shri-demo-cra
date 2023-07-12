@@ -15,7 +15,7 @@ on:
           run: echo "RELEASE_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         - name: Set env tag hash
           run: echo "TAG_HASH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
-        - Print versions
+        - name: Print versions
           run: |
             echo $RELEASE_TAG
             echo $TAG_HASH
