@@ -45,5 +45,7 @@ module.exports = async ({github, context, core}) => {
         return `[${commit.url}](${commit.message})`
     }).join('\n')
 
+    console.log(JSON.stringify(commits))
+
     core.exportVariable('changelog', changelog)
 }
