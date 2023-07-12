@@ -1,4 +1,4 @@
-module.exports = async ({github, context, core}) => {
+module.exports = async ({github, context}) => {
     const {TAG} = process.env
 
     await github.rest.repos.createRelease({

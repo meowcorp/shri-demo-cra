@@ -12,6 +12,8 @@ env:
 jobs:
   Release:
     runs-on: ubuntu-latest
+    permissions: 
+      contents: write
     steps:
       - uses: actions/checkout@v3
         with:
@@ -34,3 +36,17 @@ jobs:
           script: |
             const script = require('./.github/workflows/scripts/createRelease.js')
             await script({github, context, core})
+      - name: Create Release Issue
+        uses: actions/github-script@v6
+        env: 
+          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
+          TAG_TIMESTAMP: ${{ github.event.push.created }}
+          TAG_TIMESTAMP_UPDATED: ${{ github.event.push.head_commit.timestamp }}
+          RELEASE_AUTHOR: ${{ github.event.push.head_commit.author.name }}
+        with:
+          script: |
+            const script = require('./.github/workflows/scripts/createReleaseIssue.js')
+            await script({github, context, core})
+  Testing:
+    uses: ./.github/workflows/pr-action.yml
+            
