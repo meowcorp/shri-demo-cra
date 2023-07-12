@@ -14,7 +14,7 @@ module.exports = async ({github, context, core}) => {
 
             ## Список изменений:
             ${CHANGELOG}
-        `.replaceAll(/[ \t]+/g, ''),
+        `.replaceAll(/\t+/g, ''),
         labels: ["release"]
       });
 }
