@@ -1,7 +1,7 @@
 const {getIssueTemplate} = require('./helpers')
 
 module.exports = async ({github, context, core}) => {
-    const {TAG, TAG_TIMESTAMP, TAG_TIMESTAMP_UPDATED, RELEASE_AUTHOR, CHANGELOG} = process.env
+    const {TAG, TAG_TIMESTAMP, RELEASE_AUTHOR, CHANGELOG} = process.env
 
     const template = getIssueTemplate({
         timestamp: TAG_TIMESTAMP, 
@@ -11,14 +11,16 @@ module.exports = async ({github, context, core}) => {
     }, context)
 
     const issue = await github.rest.search.issuesAndPullRequests({
-        q: `${TAG} in:title is:issue label:RELEASE`
+        q: `${TAG} in:title is:issue label:RELEASE repo:${context.repo.owner}/${context.repo.repo}`
     })
 
-    if (issue) {
+    const issueNumber = issue.data.items[0].number
+
+    if (issue && issueNumber !== undefined) {
         await github.rest.issues.update({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: issue.data.number,
+            issue_number: issueNumber,
             body: template,
             state: "open"
         }); 
