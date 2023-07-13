@@ -10,13 +10,29 @@ module.exports = async ({github, context, core}) => {
         changelog: CHANGELOG 
     }, context)
 
-    const issue = await github.rest.issues.create({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        title: TAG,
-        body: template,
-        labels: ["release"]
-      });
+    const issue = await github.rest.search.issuesAndPullRequests({
+        q: `${TAG} in:title is:issue label:RELEASE`
+    })
 
-      core.setOutput('issueID', issue.data.number)
+    if (issue) {
+        await github.rest.issues.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issue.data.number,
+            body: template,
+            state: "open"
+        }); 
+
+        core.setOutput('issueID', issue.data.number)
+    } else {
+        const createdIssue = await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: TAG,
+            body: template,
+            labels: ["release"]
+          });
+
+          core.setOutput('issueID', createdIssue.data.number)
+    }
 }

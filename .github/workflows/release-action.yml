@@ -32,14 +32,6 @@ jobs:
             await script({github, context, core})
       - name: Print CHANGELOG
         run: echo "${{ steps.changelog.outputs.changelog }}"
-      - name: Create Release
-        uses: actions/github-script@v6
-        env: 
-          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
-        with:
-          script: |
-            const script = require('./.github/workflows/scripts/createRelease.js')
-            await script({github, context, core})
       - name: Create Release Issue
         id: releaseIssue
         uses: actions/github-script@v6
@@ -81,6 +73,12 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Create Release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const script = require('./.github/workflows/scripts/createRelease.js')
+            await script({github, context, core})
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
