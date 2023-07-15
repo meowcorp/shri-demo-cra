@@ -1,0 +1,23 @@
+name: 'Create release'
+description: 'Creating new branch and release issue'
+runs:
+  using: 'composite'
+  steps:
+    - name: Create branch
+      uses: ./.github/actions/create-branch
+      with:
+        commitSHA: ${{ github.sha }}
+        releaseTag: ${{ github.ref_name }}
+        token: ${{ github.token }}
+    - name: Create CHANGELOG
+      id: create_changelog
+      uses: mikepenz/release-changelog-builder-action@{latest-release}
+    - name: Create release issue
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        TAG: ${{ github.ref_name }}
+        CHANGELOG: ${{ steps.create_changelog.outputs.changelog }}
+        LABELS: release-candidate
+      with:
+        filename: .github/create-release/ISSUE_TEMPLATE.md

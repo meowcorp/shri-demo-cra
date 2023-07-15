@@ -1,0 +1,15 @@
+name: 'Create release'
+description: 'Creating new branch and release issue'
+inputs:
+  commitSHA:
+    description: 'Release commit SHA'
+    required: true
+  releaseTag:
+    description: 'Release tag'
+    required: true
+  token:
+    description: 'Github access token'
+    required: true
+runs:
+  using: 'composite'
+  main: 'index.js'
