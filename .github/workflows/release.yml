@@ -44,7 +44,7 @@ jobs:
           RELEASE_LINK: ${{ steps.gh-create-release.outputs.html_url }}
         run: |
           gh issue comment ${{ steps.createRelease.outputs.issueNumber }} --edit-last \
-            --body ":white_check_mark: [Код успешно протестирован]($RUN_LINK)\n[Был создан новый релиз](${RELEASE_LINK})"
+            --body ":white_check_mark: [Код успешно протестирован]($RUN_LINK)<br>[Был создан новый релиз](${RELEASE_LINK})"
       - name: Update release issue status (failt)
         if: ${{ failure() }}
         run: |
