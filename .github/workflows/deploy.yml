@@ -28,7 +28,7 @@ jobs:
           gh issue comment ${{ github.event.issue.number }} \
             --body ":rocket: Запускаю приложение в космос..."
       - name: Build
-        run: npm run ci && npm run build
+        run: npm ci && npm run build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
