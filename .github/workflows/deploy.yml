@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions: 
       issues: write
+      contents: write
     steps:
       - uses: mad9000/actions-find-and-replace-string@3
         id: replaceString
@@ -38,6 +39,7 @@ jobs:
         run: |
           gh issue comment ${{ github.event.issue.number }} --edit-last \
             --body ":rocket: [Приложение успешно развернуто]($DEPLOY_LINK)"
+          gh issue close ${{ github.event.issue.number }}
       - name: Update release issue (failt)
         if: ${{ failure() }}
         run: |
