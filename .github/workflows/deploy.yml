@@ -9,7 +9,7 @@ env:
   DEPLOY_LINK: https://${{ github.repository_owner }}.github.io/${{ github.repository }}/  
 jobs:
   Deploy:
-    if: ${{ startsWith(github.event.issue.title, 'RC/') && github.event.label.name === 'approved' }}
+    if: ${{ startsWith(github.event.issue.title, 'RC/') && github.event.label.name == 'approved' }}
     runs-on: ubuntu-latest
     permissions: 
       issues: write
