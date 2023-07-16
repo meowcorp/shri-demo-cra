@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/create-release
         id: createRelease
-      - name: Update issue status
+      - name: Create issue status
         if: ${{ success() }}
         run: |
           gh issue comment ${{ steps.createRelease.outputs.issueNumber }} \
@@ -39,13 +39,13 @@ jobs:
             [Ссылка на issue](${{ steps.createRelease.outputs.issueLink }})
             ### :blue_book: Changelog
               ${{ steps.createRelease.outputs.changelog }}
-      - name: Update release issue status
+      - name: Update release issue status (success)
         env:
           RELEASE_LINK: ${{ steps.gh-create-release.outputs.html_url }}
         run: |
           gh issue comment ${{ steps.createRelease.outputs.issueNumber }} --edit-last \
             --body ":white_check_mark: [Код успешно протестирован]($RUN_LINK)\n[Был создан новый релиз](${RELEASE_LINK})"
-      - name: Update release issue status
+      - name: Update release issue status (failt)
         if: ${{ failure() }}
         run: |
           gh issue comment ${{ steps.createRelease.outputs.issueNumber }} --edit-last \

@@ -1,10 +1,32 @@
 name: Deploy specific release
 run-name: Deploy to pages
+on:
+  issues:
+    types: [labeled]
 
+env:
+  GH_TOKEN: ${{ github.token }}  
+  DEPLOY_LINK: https://${{ github.repository_owner }}.github.io/${{ github.repository }}/  
 jobs:
   Deploy:
+    if: ${{ startsWith(github.event.issue.title, ":pencil2: v") && github.event.label.name === 'approved' }}
     runs-on: ubuntu-latest
+    permissions: 
+      issues: write
     steps:
+      uses: mad9000/actions-find-and-replace-string@3
+      id: replaceString
+      with:
+      - name: Create issue status
+        run: |
+          gh issue comment ${{ github.event.issue.number }} \
+            --body ":rocket: Запускаю приложение в космос..."
+        source: ${{ github.event.issue.title }}
+        find: ':pencil2: v'
+        replace: 'v'
+      - uses: actions/checkout@v3
+        with: 
+          ref: ${{ steps.replaceString.outputs.value }}
       - name: Build
         run: npm run ci && npm run build
       - name: Deploy
@@ -12,3 +34,12 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+      - name: Update release issue (success)
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --edit-last \
+            --body ":rocket: [Приложение успешно развернуто]($DEPLOY_LINK)"
+      - name: Update release issue (failt)
+        if: ${{ failure() }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --edit-last \
+            --body ":warning: Ошибка при развертывании приложения"
