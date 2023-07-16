@@ -1,5 +1,5 @@
 ---
-title: ":pencil2: {{ env.TAG }}"
+title: "RC/{{ env.TAG }}"
 labels: release-candidate
 ---
 # :pencil2: Релиз {{ env.TAG }}
