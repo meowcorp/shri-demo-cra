@@ -14,16 +14,16 @@ jobs:
     permissions: 
       issues: write
     steps:
-      uses: mad9000/actions-find-and-replace-string@3
-      id: replaceString
-      with:
+      - uses: mad9000/actions-find-and-replace-string@3
+        id: replaceString
+        with:
+          source: ${{ github.event.issue.title }}
+          find: ":pencil2: v"
+          replace: 'v'
       - name: Create issue status
         run: |
           gh issue comment ${{ github.event.issue.number }} \
             --body ":rocket: Запускаю приложение в космос..."
-        source: ${{ github.event.issue.title }}
-        find: ":pencil2: v"
-        replace: "v"
       - uses: actions/checkout@v3
         with: 
           ref: ${{ steps.replaceString.outputs.value }}
