@@ -1,0 +1,10 @@
+name: Check conventional commits
+run-name: Check commit for conventional naming
+jobs:
+  Check-Commit:
+    steps:
+      runs-on: ubuntu-latest
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Commit lint
+        uses: wagoid/commitlint-github-action@v5
