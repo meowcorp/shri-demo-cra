@@ -1,9 +1,10 @@
 name: Check conventional commits
 run-name: Check commit for conventional naming
+on: [push]
 jobs:
   Check-Commit:
+    runs-on: ubuntu-latest
     steps:
-      runs-on: ubuntu-latest
       - name: Checkout
         uses: actions/checkout@v3
       - name: Commit lint
