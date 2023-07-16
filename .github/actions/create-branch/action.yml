@@ -11,5 +11,5 @@ inputs:
     description: 'Github access token'
     required: true
 runs:
-  using: 'composite'
-  main: 'index.js'
+  using: 'node16'
+  main: 'dist/index.js'

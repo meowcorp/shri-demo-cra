@@ -4,7 +4,9 @@ on:
   push:
     tags:
       - 'v[0-9]+'
-
+env:
+  GH_TOKEN: ${{ github.token }}
+  RUN_LINK: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 jobs:
   Create-Release-Candidate:
     runs-on: ubuntu-latest
@@ -15,4 +17,36 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/create-release.yml
+      - uses: ./.github/actions/create-release
+        id: createRelease
+      - name: Update issue status
+        if: ${{ success() }}
+        run: |
+          gh issue comment ${{ steps.createRelease.outputs.issueNumber }} \
+            --body ":recycle: [Тестирую код...]($RUN_LINK)"
+      - name: Testing
+        uses: ./.github/actions/testing
+      - name: Build code
+        run: npm ci && npm run build
+      - name: Create release
+        id: gh-create-release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build"
+          allowUpdates: true
+          body: |
+            # ${{ github.ref_name }} release
+            [Ссылка на issue](${{ steps.createRelease.outputs.issueLink }})
+            ### :blue_book: Changelog
+              ${{ steps.createRelease.outputs.changelog }}
+      - name: Update release issue status
+        env:
+          RELEASE_LINK: ${{ steps.gh-create-release.outputs.html_url }}
+        run: |
+          gh issue comment ${{ steps.createRelease.outputs.issueNumber }} --edit-last \
+            --body ":white_check_mark: [Код успешно протестирован]($RUN_LINK)\n[Был создан новый релиз](${RELEASE_LINK})"
+      - name: Update release issue status
+        if: ${{ failure() }}
+        run: |
+          gh issue comment ${{ steps.createRelease.outputs.issueNumber }} --edit-last \
+            --body ":warning: [Тестирование завершилось ошибкой]($RUN_LINK)"

@@ -1,0 +1,12 @@
+name: 'Create changelog'
+description: 'Creating changelog'
+inputs:
+  token:
+    description: "Github access token"
+    default: ${{ github.token }}
+  sha:
+    description: "Current commit hash"
+    default: ${{ github.sha }}
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
