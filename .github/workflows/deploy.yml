@@ -9,7 +9,7 @@ env:
   DEPLOY_LINK: https://${{ github.repository_owner }}.github.io/${{ github.repository }}/  
 jobs:
   Deploy:
-    if: ${{ startsWith(github.event.issue.title, ":pencil2: v") && github.event.label.name === 'approved' }}
+    if: ${{ startsWith(github.event.issue.title, ":pencil2: v") && github.event.label.name === "approved" }}
     runs-on: ubuntu-latest
     permissions: 
       issues: write
@@ -22,8 +22,8 @@ jobs:
           gh issue comment ${{ github.event.issue.number }} \
             --body ":rocket: Запускаю приложение в космос..."
         source: ${{ github.event.issue.title }}
-        find: ':pencil2: v'
-        replace: 'v'
+        find: ":pencil2: v"
+        replace: "v"
       - uses: actions/checkout@v3
         with: 
           ref: ${{ steps.replaceString.outputs.value }}
