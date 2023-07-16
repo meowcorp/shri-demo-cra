@@ -2,6 +2,15 @@ name: Pull request action
 run-name: Validate ${{ github.event.pull_request.title }} PR
 on: [pull_request]
 jobs:
+  Test-Commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Commit lint
+        uses: wagoid/commitlint-github-action@v5
   Test-Code:
     runs-on: ubuntu-latest
     steps:
