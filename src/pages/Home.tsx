@@ -7,7 +7,7 @@ export const Home: FC = () => {
   return (
     <>
       <Helmet>
-        <title>Home page</title>
+        <title>Home Page</title>
       </Helmet>
       <h1 data-testid="page-title">Home</h1>
       <p>Todo list.</p>
